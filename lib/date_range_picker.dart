@@ -83,7 +83,7 @@ class _DatePickerHeader extends StatelessWidget {
     final TextTheme headerTextTheme = themeData.primaryTextTheme;
     Color? dayColor;
     Color? yearColor;
-    switch (themeData.primaryColorBrightness) {
+    switch (themeData.brightness) {
       case Brightness.light:
         dayColor = mode == DatePickerMode.day ? Colors.black87 : Colors.black54;
         yearColor =
@@ -95,9 +95,9 @@ class _DatePickerHeader extends StatelessWidget {
         break;
     }
     final TextStyle dayStyle =
-        headerTextTheme.headline4!.copyWith(color: dayColor, height: 1.4);
+        headerTextTheme.headlineMedium!.copyWith(color: dayColor, height: 1.4);
     final TextStyle yearStyle =
-        headerTextTheme.subtitle1!.copyWith(color: yearColor, height: 1.4);
+        headerTextTheme.titleMedium!.copyWith(color: yearColor, height: 1.4);
 
     Color? backgroundColor;
     switch (themeData.brightness) {
@@ -105,7 +105,7 @@ class _DatePickerHeader extends StatelessWidget {
         backgroundColor = themeData.primaryColor;
         break;
       case Brightness.dark:
-        backgroundColor = themeData.backgroundColor;
+        backgroundColor = themeData.primaryColorDark;
         break;
     }
 
@@ -439,7 +439,7 @@ class DayPicker extends StatelessWidget {
     final int firstDayOffset =
         _computeFirstDayOffset(year, month, localizations);
     final List<Widget> labels = <Widget>[];
-    labels.addAll(_getDayHeaders(themeData.textTheme.caption, localizations));
+    labels.addAll(_getDayHeaders(themeData.textTheme.bodySmall, localizations));
     for (int i = 0; true; i += 1) {
       // 1-based day of month, e.g. 1-31 for January, and 1-29 for February on
       // a leap year.
@@ -454,7 +454,7 @@ class DayPicker extends StatelessWidget {
             (selectableDayPredicate != null &&
                 !selectableDayPredicate!(dayToBuild));
         BoxDecoration? decoration;
-        TextStyle? itemStyle = themeData.textTheme.bodyText2;
+        TextStyle? itemStyle = themeData.textTheme.bodyMedium;
         final bool isSelectedFirstDay = selectedFirstDate.year == year &&
             selectedFirstDate.month == month &&
             selectedFirstDate.day == day;
@@ -469,12 +469,12 @@ class DayPicker extends StatelessWidget {
             : null;
         if (isSelectedFirstDay &&
             (isSelectedLastDay == null || isSelectedLastDay)) {
-          itemStyle = themeData.textTheme.bodyText1;
+          itemStyle = themeData.textTheme.bodyLarge;
           decoration = new BoxDecoration(
               color: themeData.primaryColor, shape: BoxShape.circle);
         } else if (isSelectedFirstDay) {
           // The selected day gets a circle background highlight, and a contrasting text color.
-          itemStyle = themeData.textTheme.bodyText1;
+          itemStyle = themeData.textTheme.bodyLarge;
           decoration = new BoxDecoration(
               color: themeData.primaryColor,
               borderRadius: BorderRadius.only(
@@ -482,7 +482,7 @@ class DayPicker extends StatelessWidget {
                 bottomLeft: new Radius.circular(50.0),
               ));
         } else if (isSelectedLastDay != null && isSelectedLastDay) {
-          itemStyle = themeData.textTheme.bodyText1;
+          itemStyle = themeData.textTheme.bodyLarge;
           decoration = new BoxDecoration(
               color: themeData.primaryColor,
               borderRadius: BorderRadius.only(
@@ -494,14 +494,14 @@ class DayPicker extends StatelessWidget {
               color: themeData.primaryColor.withOpacity(0.1),
               shape: BoxShape.rectangle);
         } else if (disabled) {
-          itemStyle = themeData.textTheme.bodyText2!
+          itemStyle = themeData.textTheme.bodyMedium!
               .copyWith(color: themeData.disabledColor);
         } else if (currentDate.year == year &&
             currentDate.month == month &&
             currentDate.day == day) {
           // The current day gets a different text color.
           itemStyle =
-              themeData.textTheme.bodyText1!.copyWith(color: themeData.primaryColor);
+              themeData.textTheme.bodyLarge!.copyWith(color: themeData.primaryColor);
         }
 
         Widget dayWidget = new Container(
@@ -563,7 +563,7 @@ class DayPicker extends StatelessWidget {
               child: new ExcludeSemantics(
                 child: new Text(
                   localizations.formatMonthYear(displayedMonth),
-                  style: themeData.textTheme.subtitle1,
+                  style: themeData.textTheme.titleMedium,
                 ),
               ),
             ),
@@ -943,7 +943,7 @@ class _YearPickerState extends State<YearPicker> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterial(context));
     final ThemeData themeData = Theme.of(context);
-    final TextStyle? style = themeData.textTheme.bodyText2;
+    final TextStyle? style = themeData.textTheme.bodyMedium;
     return new ListView.builder(
       controller: scrollController,
       itemExtent: _itemExtent,
@@ -954,8 +954,8 @@ class _YearPickerState extends State<YearPicker> {
             (widget.selectedLastDate != null &&
                 year == widget.selectedLastDate!.year);
         final TextStyle? itemStyle = isSelected
-            ? themeData.textTheme.headline5!
-                .copyWith(color: themeData.accentColor)
+            ? themeData.textTheme.headlineSmall!
+                .copyWith(color: themeData.hintColor)
             : style;
         return new InkWell(
           key: new ValueKey<int>(year),
